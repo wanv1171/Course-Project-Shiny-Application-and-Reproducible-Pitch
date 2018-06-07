@@ -1,0 +1,13 @@
+name: LA_Shooting_Map
+title: LA_Shooting_Map
+username:
+account: mingdawang
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 356625
+bundleId: 1416131
+url: https://mingdawang.shinyapps.io/LA_Shooting_Map/
+when: 1528352118.93724
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Pitch.Rmd

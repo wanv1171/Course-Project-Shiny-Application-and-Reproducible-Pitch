@@ -1,0 +1,73 @@
+---
+title: "Pitch"
+author: "Mingda Wang"
+date: "Jun 6 2018"
+output:
+  slidy_presentation: default
+---
+
+```{r setup, message=FALSE, include=FALSE}
+library(knitr)
+library(leaflet)
+Sys.setlocale("LC_ALL","English")
+opts_chunk$set(eval = TRUE, echo = TRUE)
+```
+
+## Summary
+The aim of the shiny application is to show the location of all shooting incidents from 2010 to now.
+
+The Shiny application can be found at: [ShinyApps.io](https://mingdawang.shinyapps.io/LA_Shooting_Map/)
+
+The complete dataset can be found at: [LA Crime Data](https://data.lacity.org/api/views/y8tr-7khq/rows.csv?accessType=DOWNLOAD)
+
+Since the original dataset is rather large, and contain information not necessary for the project. I have made a modified version of the data that has a smaller file size, which only the information needed are included.
+
+## Instructions
+Users are presented with a slider, which allows them to specify hour of the day. 
+
+Depending on the user input, a leaflet plot with shooting incidents will be presented that shows incident time. User will also be able to see the number of incidents in different areas over that 60 minutes time frame.
+
+Default is to aggregate all 24 hour data, which means all shooting incidents from 2010 to Jun 4 2018 (date when data downloaded) will be presented.
+
+## Dataset Description
+The dataset is from the City of Los Angeles. For the modified dataset, I have only included variables including longitude and latitude(transformed from Location variable), hour(transformed from Time.Occurred variable), and other variables that retains the details of each incident.
+
+Shooting related data have Crime.Code equals to 250, 251 or 753.
+250 - Shots fired at moving vehicle, train or aircraft
+251 - Shots fired at inhabited dwelling
+753 - Discharge firearms / Shots fired
+
+## Data Processing Activities
+1. Load original data
+2. Subset data based on the crime code and needed variables
+3. Extract hour information from Time.Occurred with 24 hour format, 0-23
+4. Replaced location(longitude, latitude) column with longitude and latitude column by using substr
+
+For complete data preprocessing activities, please refer to [ProcessCrimeData.R](https://github.com/wanv1171/Course-Project-Shiny-Application-and-Reproducible-Pitch/blob/master/ProcessCrimeData.R)
+
+```{r dataSummary}
+shotData <- read.csv("ready_la_crime.csv", sep=",")
+print(summary(shotData[,c("Hour","Weapon.Description")]))
+```
+
+## Sample Plot
+This is a sample plot that shows all shooting incidents occurred in LA from 2010 to 2018.
+This is the same output in the Shiny App when Hour slider set to 24.
+```{r samplePlot, echo = FALSE}
+ll <- leaflet() %>% 
+addTiles() %>%
+addMarkers(data = shotData,
+           lng = ~Longitude, 
+           lat = ~Latitude,
+           clusterOptions = markerClusterOptions(),
+           popup = paste("Police Record Number: ", shotData$DR.Number, "<br>",
+                         "Date Occured: ", shotData$Date.Occurred, "<br>",
+                         "Time Occured: ", shotData$Time.Occurred, "<br>",
+                         "Weapons Involved: ", shotData$Weapon.Description, "<br>",
+                         "Case Status: ", shotData$Status.Description, "<br>",
+                         "Address: ", shotData$Address, "<br>",
+                         "Cross Street: ", shotData$Cross.Street, "<br>"
+           ))
+ll
+
+```

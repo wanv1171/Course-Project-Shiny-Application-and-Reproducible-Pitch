@@ -1,0 +1,13 @@
+name: shiny_pitch
+title: shiny_pitch
+username:
+account: mingdawang
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 356619
+bundleId: 1416057
+url: https://mingdawang.shinyapps.io/shiny_pitch/
+when: 1528348482.486
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Pitch.Rmd|README.MD
